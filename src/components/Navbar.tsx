@@ -20,7 +20,6 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
       { name: 'Website Design', path: 'website-design' },
     ]},
     { name: 'Pricing', path: 'pricing' },
-    { name: 'Blog', path: 'blog' },
     { name: 'Contact', path: 'contact' },
   ];
 

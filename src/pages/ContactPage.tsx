@@ -33,6 +33,40 @@ export default function ContactPage() {
 
       if (error) throw error;
 
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer re_123456789',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'Contact Form <onboarding@resend.dev>',
+            to: ['mukeshmr0728@gmail.com'],
+            subject: `New Contact: ${formData.service} - ${formData.name}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0;">
+                  <h1 style="margin: 0;">New Contact Form Submission</h1>
+                </div>
+                <div style="background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px;">
+                  <p><strong>Name:</strong> ${formData.name}</p>
+                  <p><strong>Email:</strong> <a href="mailto:${formData.email}">${formData.email}</a></p>
+                  <p><strong>Phone:</strong> ${formData.phone || 'Not provided'}</p>
+                  <p><strong>Service:</strong> ${formData.service}</p>
+                  <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <strong>Message:</strong><br/>
+                    ${formData.message.replace(/\n/g, '<br>')}
+                  </div>
+                </div>
+              </div>
+            `,
+          }),
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+      }
+
       setSubmitStatus('success');
       setFormData({
         name: '',
