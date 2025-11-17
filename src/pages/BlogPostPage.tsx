@@ -13,6 +13,10 @@ interface BlogPost {
   tags: string[];
   author_name: string;
   published_at: string;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  keywords?: string[];
+  reading_time?: number | null;
 }
 
 interface BlogPostPageProps {
@@ -27,6 +31,12 @@ export default function BlogPostPage({ slug, onNavigate }: BlogPostPageProps) {
   useEffect(() => {
     fetchPost();
   }, [slug]);
+
+  useEffect(() => {
+    if (post) {
+      updateMetaTags();
+    }
+  }, [post]);
 
   const fetchPost = async () => {
     try {
@@ -43,6 +53,59 @@ export default function BlogPostPage({ slug, onNavigate }: BlogPostPageProps) {
       console.error('Error fetching post:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateMetaTags = () => {
+    if (!post) return;
+
+    const metaTitle = post.meta_title || post.title;
+    const metaDescription = post.meta_description || post.excerpt;
+
+    document.title = `${metaTitle} | Marketing Blog`;
+
+    let metaDescTag = document.querySelector('meta[name="description"]');
+    if (!metaDescTag) {
+      metaDescTag = document.createElement('meta');
+      metaDescTag.setAttribute('name', 'description');
+      document.head.appendChild(metaDescTag);
+    }
+    metaDescTag.setAttribute('content', metaDescription);
+
+    let ogTitleTag = document.querySelector('meta[property="og:title"]');
+    if (!ogTitleTag) {
+      ogTitleTag = document.createElement('meta');
+      ogTitleTag.setAttribute('property', 'og:title');
+      document.head.appendChild(ogTitleTag);
+    }
+    ogTitleTag.setAttribute('content', metaTitle);
+
+    let ogDescTag = document.querySelector('meta[property="og:description"]');
+    if (!ogDescTag) {
+      ogDescTag = document.createElement('meta');
+      ogDescTag.setAttribute('property', 'og:description');
+      document.head.appendChild(ogDescTag);
+    }
+    ogDescTag.setAttribute('content', metaDescription);
+
+    if (post.featured_image) {
+      let ogImageTag = document.querySelector('meta[property="og:image"]');
+      if (!ogImageTag) {
+        ogImageTag = document.createElement('meta');
+        ogImageTag.setAttribute('property', 'og:image');
+        document.head.appendChild(ogImageTag);
+      }
+      ogImageTag.setAttribute('content', post.featured_image);
+    }
+
+    if (post.keywords && post.keywords.length > 0) {
+      let keywordsTag = document.querySelector('meta[name="keywords"]');
+      if (!keywordsTag) {
+        keywordsTag = document.createElement('meta');
+        keywordsTag.setAttribute('name', 'keywords');
+        document.head.appendChild(keywordsTag);
+      }
+      keywordsTag.setAttribute('content', post.keywords.join(', '));
     }
   };
 
@@ -112,6 +175,11 @@ export default function BlogPostPage({ slug, onNavigate }: BlogPostPageProps) {
             <Calendar size={18} />
             <span>{formatDate(post.published_at)}</span>
           </div>
+          {post.reading_time && (
+            <div className="flex items-center space-x-2">
+              <span>{post.reading_time} min read</span>
+            </div>
+          )}
         </div>
 
         {post.featured_image && (
