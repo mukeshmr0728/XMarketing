@@ -37,7 +37,7 @@ export default function ContactPage() {
         await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
-            'Authorization': 'Bearer re_ZR66CoZR_NnVMJUSEH52Yz6JBhCeUBRKh',
+            'Authorization': 'Bearer re_PvTkYYwf_sUCoXfY8BNGeWAaiFLYggP6N',
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
