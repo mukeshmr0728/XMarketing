@@ -41,7 +41,7 @@ export default function MetaAdsPage({ onNavigate }: MetaAdsPageProps) {
   const packages = [
     {
       name: 'Setup Fee',
-      price: '₹4,999 - ₹7,999',
+      price: '₹4,999 ',
       description: 'One-time campaign setup',
       features: [
         'Account audit & setup',
@@ -53,7 +53,7 @@ export default function MetaAdsPage({ onNavigate }: MetaAdsPageProps) {
     },
     {
       name: 'Starter',
-      price: '₹9,999/month',
+      price: '₹9,999/month + exclude budget',
       description: 'For small businesses',
       features: [
         '1-2 campaigns',
@@ -93,8 +93,8 @@ export default function MetaAdsPage({ onNavigate }: MetaAdsPageProps) {
   ];
 
   const results = [
-    { metric: '4.2x', label: 'Average ROAS' },
-    { metric: '40%', label: 'Lower Cost Per Lead' },
+    { metric: '2.2x', label: 'Average ROAS' },
+    { metric: '35%', label: 'Lower Cost Per Lead' },
     { metric: '3x', label: 'Higher Conversion Rate' },
   ];
 
