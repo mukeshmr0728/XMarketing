@@ -95,8 +95,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Email</h3>
-                    <a href="mailto:hello@xmarketing.com" className="text-gray-600 hover:text-blue-600 transition-colors">
-                      hello@xmarketing.com
+                    <a href="mailto:mukeshmr0728@gmail.com" className="text-gray-600 hover:text-blue-600 transition-colors">
+                      mukeshmr0728@gmail.com
                     </a>
                   </div>
                 </div>
@@ -107,8 +107,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Phone</h3>
-                    <a href="tel:+919876543210" className="text-gray-600 hover:text-blue-600 transition-colors">
-                      +91 98765 43210
+                    <a href="tel:+918778097615" className="text-gray-600 hover:text-blue-600 transition-colors">
+                      +91 8778097615
                     </a>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Location</h3>
-                    <p className="text-gray-600">Mumbai, India</p>
+                    <p className="text-gray-600">Chennai, tamilnadu India</p>
                   </div>
                 </div>
               </div>
