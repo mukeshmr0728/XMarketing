@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import emailjs from '@emailjs/browser';
 import { EMAILJS_CONFIG } from '../lib/emailjs-config';
+import { GOOGLE_SHEETS_CONFIG } from '../lib/sheets-config';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -21,19 +21,23 @@ export default function ContactPage() {
     setSubmitStatus('idle');
 
     try {
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            service: formData.service,
-            message: formData.message,
-          },
-        ]);
+      const submissionData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || 'Not provided',
+        service: formData.service,
+        message: formData.message,
+        timestamp: new Date().toISOString(),
+      };
 
-      if (error) throw error;
+      await fetch(GOOGLE_SHEETS_CONFIG.SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
 
       try {
         await emailjs.send(
@@ -45,7 +49,7 @@ export default function ContactPage() {
             phone: formData.phone || 'Not provided',
             service: formData.service,
             message: formData.message,
-            to_email: 'mukeshmr0728@gmail.com',
+            to_email: EMAILJS_CONFIG.RECIPIENT_EMAIL,
           },
           EMAILJS_CONFIG.PUBLIC_KEY
         );
@@ -115,8 +119,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Email</h3>
-                    <a href="mailto:mukeshmr0728@gmail.com" className="text-gray-600 hover:text-blue-600 transition-colors">
-                      mukeshmr0728@gmail.com
+                    <a href="mailto:your@email.com" className="text-gray-600 hover:text-blue-600 transition-colors">
+                      your@email.com
                     </a>
                   </div>
                 </div>
@@ -127,8 +131,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Phone</h3>
-                    <a href="tel:+918778097615" className="text-gray-600 hover:text-blue-600 transition-colors">
-                      +91 8778097615
+                    <a href="tel:+1234567890" className="text-gray-600 hover:text-blue-600 transition-colors">
+                      +1 (234) 567-890
                     </a>
                   </div>
                 </div>
@@ -139,7 +143,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Location</h3>
-                    <p className="text-gray-600">Chennai, tamilnadu India</p>
+                    <p className="text-gray-600">Your City, Your Country</p>
                   </div>
                 </div>
               </div>
