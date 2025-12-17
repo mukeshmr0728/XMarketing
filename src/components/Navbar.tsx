@@ -19,6 +19,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
       { name: 'SEO Services', path: 'seo' },
       { name: 'Website Design', path: 'website-design' },
     ]},
+    { name: 'Blog', path: 'blog' },
     { name: 'Pricing', path: 'pricing' },
     { name: 'Contact', path: 'contact' },
   ];
