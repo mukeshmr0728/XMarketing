@@ -12,20 +12,12 @@ import PricingPage from './pages/PricingPage';
 import ContactPage from './pages/ContactPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import BlogEditor from './pages/BlogEditor';
-import { supabase, BlogPost } from './lib/supabase';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [blogSlug, setBlogSlug] = useState<string>('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
-  const [showEditor, setShowEditor] = useState(false);
 
   useEffect(() => {
-    checkAuth();
     const path = window.location.pathname;
     const hash = window.location.hash;
 
@@ -41,10 +33,6 @@ function App() {
       const slug = path.replace('/blog/', '');
       setBlogSlug(slug);
       setCurrentPage('blog-post');
-    } else if (path === '/admin' || hash === '#admin') {
-      setCurrentPage('admin');
-    } else if (path === '/admin/login' || hash === '#admin/login') {
-      setCurrentPage('admin-login');
     } else if (path.startsWith('/services/')) {
       const service = path.replace('/services/', '');
       setCurrentPage(service);
@@ -68,10 +56,6 @@ function App() {
         const slug = newPath.replace('/blog/', '');
         setBlogSlug(slug);
         setCurrentPage('blog-post');
-      } else if (newPath === '/admin' || newHash === '#admin') {
-        setCurrentPage('admin');
-      } else if (newPath === '/admin/login' || newHash === '#admin/login') {
-        setCurrentPage('admin-login');
       } else if (newPath.startsWith('/services/')) {
         const service = newPath.replace('/services/', '');
         setCurrentPage(service);
@@ -83,37 +67,6 @@ function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    setIsAuthenticated(!!session);
-  };
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    handleNavigate('admin');
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setIsAuthenticated(false);
-    handleNavigate('home');
-  };
-
-  const handleEditPost = (post: BlogPost | null) => {
-    setEditingPost(post);
-    setShowEditor(true);
-  };
-
-  const handleBackToDashboard = () => {
-    setShowEditor(false);
-    setEditingPost(null);
-  };
-
-  const handleSavePost = () => {
-    setShowEditor(false);
-    setEditingPost(null);
-  };
 
   const handleNavigate = (page: string) => {
     setCurrentPage(page);
@@ -132,16 +85,6 @@ function App() {
   }, [currentPage]);
 
   const renderPage = () => {
-    if (currentPage === 'admin' && showEditor) {
-      return (
-        <BlogEditor
-          post={editingPost}
-          onBack={handleBackToDashboard}
-          onSave={handleSavePost}
-        />
-      );
-    }
-
     switch (currentPage) {
       case 'home':
         return <HomePage onNavigate={handleNavigate} />;
@@ -165,13 +108,6 @@ function App() {
         return <BlogPage />;
       case 'blog-post':
         return <BlogPostPage slug={blogSlug} />;
-      case 'admin-login':
-        return <AdminLogin onLogin={handleLogin} />;
-      case 'admin':
-        if (!isAuthenticated) {
-          return <AdminLogin onLogin={handleLogin} />;
-        }
-        return <AdminDashboard onEditPost={handleEditPost} />;
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }
