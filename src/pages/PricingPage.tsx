@@ -9,15 +9,15 @@ export default function PricingPage({ onNavigate }: PricingPageProps) {
     {
       icon: Target,
       name: 'Meta Ads',
-      setup: '₹4,999 - ₹7,999',
-      monthly: '₹9,999 - ₹19,999+',
+      setup: '₹1,499 - ₹2,499',
+      monthly: '₹2,999  - ₹9,999+',
       path: 'meta-ads'
     },
     {
       icon: Search,
       name: 'Google Ads',
-      setup: '₹6,999 - ₹9,999',
-      monthly: '₹11,999 - ₹24,999',
+     setup: '₹1,499 - ₹2,499',
+      monthly: '₹2,999  - ₹9,999+',
       path: 'google-ads'
     },
     {
